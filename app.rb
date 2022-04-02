@@ -35,10 +35,11 @@ post '/callback' do
         when Line::Bot::Event::Message
             case event.type
             when Line::Bot::Event::MessageType::Text
+                url = "https://assets.media-platform.com/bi/dist/images/2021/04/26/60857a590da8f4001803353d-w640.jpg"
             space_image = {
                 type: "image",
-                originalContentUrl: "https://apod.nasa.gov/apod/image/2203/IC447_446GiorgioFerrari1024.jpg",
-                previewImageUrl: "https://apod.nasa.gov/apod/image/2203/IC447_446GiorgioFerrari1024.jpg"
+                originalContentUrl: url,
+                previewImageUrl: url
             }
             message = {
                 type: "text",
