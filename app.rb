@@ -37,7 +37,7 @@ post '/callback' do
             when Line::Bot::Event::MessageType::Text
             space_image = {
                 type: "image",
-                originalContentUrl: result.url,
+                originalContentUrl: nasa,
                 previewImageUrl: 
             }
             client.reply_message(event['replyToken'], space_image)
