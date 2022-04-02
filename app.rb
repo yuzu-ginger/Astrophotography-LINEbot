@@ -17,7 +17,7 @@ end
 def nasa
     client_nasa = NasaApod::Client.new(api_key: "fc7zkkCXmyQbyymO85ZKQFWwav9ypg4xlBbVvRg2") #DEMO_KEY usage is limited.
     result = client_nasa.search(date: "2022-03-19") #You can also pass in a Ruby Date object.
-    return result.url
+    return result.explanation
 end
 
 post '/callback' do
@@ -36,16 +36,16 @@ post '/callback' do
             case event.type
             when Line::Bot::Event::MessageType::Text
                 url = nasa
-            space_image = {
-                type: "image",
-                originalContentUrl: url,
-                previewImageUrl: url
-            }
+            #space_image = {
+            #    type: "image",
+            #    originalContentUrl: url,
+            #    previewImageUrl: url
+            #}
             message = {
                 type: "text",
                 text: nasa
             }
-            client.reply_message(event['replyToken'], [space_image, message])
+            client.reply_message(event['replyToken'], message)
             end
         end
     end
