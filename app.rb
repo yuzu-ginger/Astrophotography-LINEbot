@@ -37,8 +37,8 @@ post '/callback' do
             when Line::Bot::Event::MessageType::Text
             space_image = {
                 type: "image",
-                originalContentUrl: nasa,
-                previewImageUrl: nasa
+                originalContentUrl: "https://apod.nasa.gov/apod/image/2203/IC447_446GiorgioFerrari1024.jpg",
+                previewImageUrl: "https://apod.nasa.gov/apod/image/2203/IC447_446GiorgioFerrari1024.jpg"
             }
             message = {
                 type: "text",
