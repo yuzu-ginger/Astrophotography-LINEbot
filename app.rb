@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'sinatra'
 require 'line/bot'
+require 'nasa_apod'
 
 get '/' do
   'hello world!'
@@ -12,7 +13,13 @@ def client
       config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
     }
 end
-  
+
+def nasa
+    client_nasa = NasaApod::Client.new(api_key: "fc7zkkCXmyQbyymO85ZKQFWwav9ypg4xlBbVvRg2") #DEMO_KEY usage is limited.
+    result = client_nasa.search(date: "2022-03-18") #You can also pass in a Ruby Date object.
+    return result.url
+end
+
 post '/callback' do
     body = request.body.read
   
@@ -28,11 +35,12 @@ post '/callback' do
         when Line::Bot::Event::Message
             case event.type
             when Line::Bot::Event::MessageType::Text
-            message = {
-                type: 'text',
-                text: event.message['text']
+            space_image = {
+                type: "image",
+                originalContentUrl: result.url,
+                previewImageUrl: 
             }
-            client.reply_message(event['replyToken'], message)
+            client.reply_message(event['replyToken'], space_image)
             end
         end
     end
