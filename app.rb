@@ -40,7 +40,11 @@ post '/callback' do
                 originalContentUrl: nasa,
                 previewImageUrl: nasa
             }
-            client.reply_message(event['replyToken'], space_image)
+            message = {
+                type: "text",
+                text: nasa
+            }
+            client.reply_message(event['replyToken'], [space_image, massage])
             end
         end
     end
