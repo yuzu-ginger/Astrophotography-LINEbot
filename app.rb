@@ -35,17 +35,17 @@ post '/callback' do
         when Line::Bot::Event::Message
             case event.type
             when Line::Bot::Event::MessageType::Text
-                url = nasa
-            #space_image = {
-            #    type: "image",
-            #    originalContentUrl: url,
-            #    previewImageUrl: url
-            #}
+                url = "https://apod.nasa.gov/apod/image/1906/gendlerM83-New-HST-ESO-S1024.jpg"
+            space_image = {
+                type: "image",
+                originalContentUrl: url,
+                previewImageUrl: url
+            }
             message = {
                 type: "text",
                 text: nasa
             }
-            client.reply_message(event['replyToken'], message)
+            client.reply_message(event['replyToken'], [space_image, message])
             end
         end
     end
