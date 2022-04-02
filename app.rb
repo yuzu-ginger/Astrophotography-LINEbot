@@ -38,7 +38,7 @@ post '/callback' do
             space_image = {
                 type: "image",
                 originalContentUrl: nasa,
-                previewImageUrl: 
+                previewImageUrl: nasa
             }
             client.reply_message(event['replyToken'], space_image)
             end
