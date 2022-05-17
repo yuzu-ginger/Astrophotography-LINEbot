@@ -2,6 +2,7 @@ require 'bundler/setup'
 require 'sinatra'
 require 'line/bot'
 require 'nasa_apod'
+require 'date'
 
 get '/' do
   'hello world!'
@@ -14,10 +15,14 @@ def client
     }
 end
 
-def nasa
-    client_nasa = NasaApod::Client.new(api_key: "fc7zkkCXmyQbyymO85ZKQFWwav9ypg4xlBbVvRg2") #DEMO_KEY usage is limited.
-    result = client_nasa.search(date: "2022-03-19") #You can also pass in a Ruby Date object.
-    return result.explanation
+def nasa(today)
+  if (txtにその日付がなければ)
+    client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
+    result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
+    return result.url
+  else (あれば)
+    そのURLを返す
+  end
 end
 
 post '/callback' do
@@ -35,17 +40,16 @@ post '/callback' do
         when Line::Bot::Event::Message
             case event.type
             when Line::Bot::Event::MessageType::Text
-                url = "https://apod.nasa.gov/apod/image/1906/gendlerM83-New-HST-ESO-S1024.jpg"
-            space_image = {
-                type: "image",
-                originalContentUrl: url,
-                previewImageUrl: url
-            }
-            message = {
-                type: "text",
-                text: nasa
-            }
-            client.reply_message(event['replyToken'], [space_image, message])
+                space_image = {
+                    type: 'image',
+                    originalContentUrl: url,
+                    previewImageUrl: url
+                }
+                message = {
+                    type: "text",
+                    text: nasa
+                }
+                client.reply_message(event['replyToken'], [space_image, message])
             end
         end
     end
