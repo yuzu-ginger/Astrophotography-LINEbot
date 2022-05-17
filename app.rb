@@ -25,8 +25,8 @@ def nasa(today)
         client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
         result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
         p result.url
-        CSV.open(iFileName,'a') do |text|
-            text << [today,result.url]
+        text = CSV.open(iFileName,'a')
+        text.push ["#{today}","#{result.url}"]
         end
         return result.url
     else
