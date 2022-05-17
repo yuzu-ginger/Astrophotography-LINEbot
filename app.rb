@@ -17,25 +17,9 @@ def client
 end
 
 def nasa(today)
-    iFileName = "image_url.csv"
     client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
     result = client_nasa.search(date: "#{today}") 
-    uri = result.url
-    text = CSV.open("image_url.csv",'a')
-    text.puts [uri]
-    image_csv = CSV.read(iFileName, headers: true).map(&:to_hash)
-    # find_data = image_csv.find {|x| x["date"] == "#{today}"}
-    p image_csv
-    # if find_data == nil
-    #     client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
-    #     result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
-    #     p result.url
-    #     text = CSV.open(iFileName,'a')
-    #     text.puts ["#{today}","#{result.url}"]
-    #     return result.url
-    # else
-    #     return find_data["image_url"]
-    # end
+    return result.url
 end
 
 post '/callback' do
