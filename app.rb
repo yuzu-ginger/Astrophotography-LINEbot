@@ -16,13 +16,20 @@ def client
 end
 
 def nasa(today)
-  if (txtにその日付がなければ)
-    client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
-    result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
-    return result.url
-  else (あれば)
-    そのURLを返す
-  end
+    iFileName = "image_url.txt"
+    list = []
+    image_csv = CSV.read(iFileName, headers: true).map(&:to_hash)
+    find_data = image_csv.find {|x| x["date"] == "#{today}"}
+    if find_data == nil
+        return find_data["image_url"]
+    else
+        client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
+        result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
+        CSV.open(iFileName,'w') do |text|
+            text << [today,result.url]
+        end
+        return result.url
+    end
 end
 
 post '/callback' do
@@ -40,16 +47,20 @@ post '/callback' do
         when Line::Bot::Event::Message
             case event.type
             when Line::Bot::Event::MessageType::Text
-                space_image = {
-                    type: 'image',
-                    originalContentUrl: url,
-                    previewImageUrl: url
-                }
-                message = {
-                    type: "text",
-                    text: nasa
-                }
-                client.reply_message(event['replyToken'], [space_image, message])
+                if event.message['text'] =~ /nasa/
+                    today = Date.today - 1   # NASA(US)との時差のため昨日の日付にする
+                    url = nasa(today)
+                    space_image = {
+                        type: 'image',
+                        originalContentUrl: url,
+                        previewImageUrl: url
+                    }
+                    message = {
+                        type: "text",
+                        text: nasa
+                    }
+                    client.reply_message(event['replyToken'], space_image)
+                end
             end
         end
     end
