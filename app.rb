@@ -38,7 +38,7 @@ post '/callback' do
             case event.type
             when Line::Bot::Event::MessageType::Text
                 if event.message['text'] =~ /nasa/
-                    today = Date.today - 1   # NASA(US)との時差のため昨日の日付にする
+                    today = Date.today
                     p today
                     url = nasa(today)
                     space_image = {
