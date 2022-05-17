@@ -26,16 +26,16 @@ def nasa(today)
     text.puts [today, uri]
     find_data = image_csv.find {|x| x["date"] == "#{today}"}
     p find_data
-    if find_data == nil
-        client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
-        result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
-        p result.url
-        text = CSV.open(iFileName,'a')
-        text.puts ["#{today}","#{result.url}"]
-        return result.url
-    else
-        return find_data["image_url"]
-    end
+    # if find_data == nil
+    #     client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
+    #     result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
+    #     p result.url
+    #     text = CSV.open(iFileName,'a')
+    #     text.puts ["#{today}","#{result.url}"]
+    #     return result.url
+    # else
+    #     return find_data["image_url"]
+    # end
 end
 
 post '/callback' do
@@ -61,10 +61,6 @@ post '/callback' do
                         type: 'image',
                         originalContentUrl: url,
                         previewImageUrl: url
-                    }
-                    message = {
-                        type: "text",
-                        text: nasa
                     }
                     client.reply_message(event['replyToken'], space_image)
                 end
