@@ -22,14 +22,14 @@ def nasa(today)
     find_data = image_csv.find {|x| x["date"] == "#{today}"}
     p find_data
     if find_data == nil
-        return find_data["image_url"]
-    else
         client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
         result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
         CSV.open(iFileName,'w') do |text|
             text << [today,result.url]
         end
         return result.url
+    else
+        return find_data["image_url"]
     end
 end
 
