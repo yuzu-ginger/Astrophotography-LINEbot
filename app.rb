@@ -18,9 +18,9 @@ end
 
 def nasa(today)
     iFileName = "image_url.csv"
-    list = []
     image_csv = CSV.read(iFileName, headers: true).map(&:to_hash)
     find_data = image_csv.find {|x| x["date"] == "#{today}"}
+    p find_data
     if find_data == nil
         return find_data["image_url"]
     else
