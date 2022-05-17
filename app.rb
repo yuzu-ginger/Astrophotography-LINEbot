@@ -1,9 +1,9 @@
 require 'bundler/setup'
 require 'sinatra'
-require 'csv'
 require 'line/bot'
 require 'nasa_apod'
-require 'date'
+require 'net/http'
+require 'json'
 
 get '/' do
   'hello world!'
@@ -16,10 +16,11 @@ def client
     }
 end
 
-def nasa(today)
-    client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
-    result = client_nasa.search(date: "#{today}") 
-    return result.url, result.title
+def nasa
+    uri = URI.parse('https://api.nasa.gov/planetary/apod?api_key=4ftlGyoLKwGDdwKVvco7nkWzqC1520tknZM28pKS')
+    json = Net::HTTP.get(uri)
+    data = JSON.parse(json)
+    return data["url"], data["date"], data["title"]
 end
 
 post '/callback' do
@@ -40,9 +41,9 @@ post '/callback' do
                 if event.message['text'] == "今日の天文写真は？"
                     today = Date.today
                     puts today
-                    data = nasa(today)
-                    url = data[0]
-                    title = data[1]
+                    url = nasa[0]
+                    date = nasa[1]
+                    title = nasa[2]
                     space_image = {
                         type: 'image',
                         originalContentUrl: url,
@@ -50,7 +51,11 @@ post '/callback' do
                     }
                     message = {
                         type: 'text',
-                        text: "#{today}\n#{title}"
+                        text: "#{date}\n#{title}"
+                    }
+                    message = {
+                        type: 'text',
+                        text: "https://www.youtube.com/watch?v=aKK7vS2CHC8"
                     }
                     client.reply_message(event['replyToken'], [space_image, message])
                 end
