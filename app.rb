@@ -26,7 +26,7 @@ def nasa(today)
         result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
         p result.url
         text = CSV.open(iFileName,'a')
-        text.push ["#{today}","#{result.url}"]
+        text.puts ["#{today}","#{result.url}"]
         end
         return result.url
     else
