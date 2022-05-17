@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'sinatra'
+require 'csv'
 require 'line/bot'
 require 'nasa_apod'
 require 'date'
