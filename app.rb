@@ -37,7 +37,7 @@ post '/callback' do
         when Line::Bot::Event::Message
             case event.type
             when Line::Bot::Event::MessageType::Text
-                if event.message['text'] =~ /nasa/
+                if event.message['text'] == "今日の天文写真は？"
                     today = Date.today
                     puts today
                     data = nasa(today)
@@ -51,7 +51,7 @@ post '/callback' do
                     }
                     message = {
                         type: 'text',
-                        text: "#{title}\n\n#{explanation}"
+                        text: "#{today}\n#{title}\n\n#{explanation}"
                     }
                     client.reply_message(event['replyToken'], [space_image, message])
                 end
