@@ -21,8 +21,9 @@ def nasa(today)
     image_csv = CSV.read(iFileName, headers: true).map(&:to_hash)
     client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
     result = client_nasa.search(date: "#{today}") 
-    text = CSV.open(iFileName,'a')
-    text.puts ["#{today}","#{result.url}"]
+    uri = result.url
+    text = CSV.open("image_url.csv",'a')
+    text.puts [today, uri]
     find_data = image_csv.find {|x| x["date"] == "#{today}"}
     p find_data
     if find_data == nil
