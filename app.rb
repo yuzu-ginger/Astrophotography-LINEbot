@@ -24,6 +24,7 @@ def nasa(today)
     if find_data == nil
         client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
         result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
+        p result.url
         CSV.open(iFileName,'w') do |text|
             text << [today,result.url]
         end
@@ -50,6 +51,7 @@ post '/callback' do
             when Line::Bot::Event::MessageType::Text
                 if event.message['text'] =~ /nasa/
                     today = Date.today - 1   # NASA(US)との時差のため昨日の日付にする
+                    p today
                     url = nasa(today)
                     space_image = {
                         type: 'image',
