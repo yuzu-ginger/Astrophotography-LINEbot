@@ -27,7 +27,6 @@ def nasa(today)
         p result.url
         text = CSV.open(iFileName,'a')
         text.puts ["#{today}","#{result.url}"]
-        end
         return result.url
     else
         return find_data["image_url"]
