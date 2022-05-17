@@ -17,7 +17,8 @@ def client
 end
 
 def nasa
-    uri = URI.parse('https://api.nasa.gov/planetary/apod?api_key=4ftlGyoLKwGDdwKVvco7nkWzqC1520tknZM28pKS')
+    api_key = ENV["NASA_API_KEY"]
+    uri = URI.parse("https://api.nasa.gov/planetary/apod?api_key=#{api_key}")
     json = Net::HTTP.get(uri)
     data = JSON.parse(json)
     return data["url"], data["date"], data["title"]
@@ -44,18 +45,21 @@ post '/callback' do
                     url = nasa[0]
                     date = nasa[1]
                     title = nasa[2]
-                    space_image = {
-                        type: 'image',
-                        originalContentUrl: url,
-                        previewImageUrl: url
-                    }
+                    if url =~ /jpg/
+                        space_image = {
+                            type: 'image',
+                            originalContentUrl: url,
+                            previewImageUrl: url
+                        }
+                    else
+                        space_image = {
+                            type: 'text',
+                            text: url
+                        }
+                    end
                     message = {
                         type: 'text',
                         text: "#{date}\n#{title}"
-                    }
-                    message = {
-                        type: 'text',
-                        text: "https://www.youtube.com/watch?v=aKK7vS2CHC8"
                     }
                     client.reply_message(event['replyToken'], [space_image, message])
                 end
