@@ -18,14 +18,14 @@ end
 
 def nasa(today)
     iFileName = "image_url.csv"
-    image_csv = CSV.read(iFileName, headers: true).map(&:to_hash)
-    # client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
-    # result = client_nasa.search(date: "#{today}") 
-    # uri = result.url
+    client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
+    result = client_nasa.search(date: "#{today}") 
+    uri = result.url
     text = CSV.open("image_url.csv",'a')
-    text.puts ["a", "a"]
-    find_data = image_csv.find {|x| x["date"] == "#{today}"}
-    p find_data
+    text.puts [uri]
+    image_csv = CSV.read(iFileName, headers: true).map(&:to_hash)
+    # find_data = image_csv.find {|x| x["date"] == "#{today}"}
+    p image_csv
     # if find_data == nil
     #     client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
     #     result = client_nasa.search(date: "#{today}") #You can also pass in a Ruby Date object.
