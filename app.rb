@@ -19,7 +19,7 @@ end
 def nasa(today)
     client_nasa = NasaApod::Client.new(api_key: ENV['NASA_API_KEY']) #DEMO_KEY usage is limited.
     result = client_nasa.search(date: "#{today}") 
-    return result.url, result.title, result.explanation
+    return result.url, result.title
 end
 
 post '/callback' do
@@ -43,7 +43,6 @@ post '/callback' do
                     data = nasa(today)
                     url = data[0]
                     title = data[1]
-                    explanation = data[2]
                     space_image = {
                         type: 'image',
                         originalContentUrl: url,
@@ -51,7 +50,7 @@ post '/callback' do
                     }
                     message = {
                         type: 'text',
-                        text: "#{today}\n#{title}\n\n#{explanation}"
+                        text: "#{today}\n#{title}"
                     }
                     client.reply_message(event['replyToken'], [space_image, message])
                 end
