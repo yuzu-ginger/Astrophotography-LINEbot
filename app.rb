@@ -45,13 +45,13 @@ post '/callback' do
             case event.type
             when Line::Bot::Event::MessageType::Text
                 if event.message['text'] == "今日の天文写真は？"
-                    today = Date.today
                     data = nasa(0)
                     url = data[0]
                     date = data[1]
                     title = data[2]
                     reply_image(event, url, date, title)
                 elsif event.message['text'] == "あの日の天文写真は？"
+                    today = Date.today
                     client.reply_message(event['replyToken'], select_date(today))
                 end
             end
